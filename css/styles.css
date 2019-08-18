@@ -26,11 +26,12 @@ header {
 .header-inner-container {
     max-width: 1180px;
     margin: auto;
+    text-shadow: 2px 2px 8px rgba(45, 228, 252, 0.96);
 }
 
 header h1 {
     font-size: 2em;
-    color: rgba(24, 40, 40, 0.9);
+    color: rgba(27, 3, 123, 0.9);
     margin-top: 35px;
 }
 
@@ -44,7 +45,7 @@ header h1 {
 }
 
 .search-input:active, .search-input:hover, .search-input:focus {
-    border: 1px solid rgba(50, 50, 50, 0.9);
+    border: 1px solid rgba(27, 3, 123, 0.9);
 }
 
 .search-submit {
@@ -58,8 +59,8 @@ header h1 {
 }
 
 .search-submit:active, .search-submit:hover, .search-submit:focus {
-    background: rgba(255, 255, 255, 0.9);
-    border: 1px solid rgba(50, 50, 50, 0.9);
+    background: rgb(254, 255, 197);
+    border: 1px solid rgba(27, 3, 123, 0.9);
 }
 
 
@@ -89,9 +90,10 @@ header h1 {
     padding: 10px;
     background: rgba(245, 245, 245, 0.9);
     border-radius: 0.25em;
-    border: 1px solid rgba(50, 50, 50, 0.3);
+    border: 1px solid rgba(33, 51, 56, 0.3);
     transition: .4s ease-out;
     overflow: hidden;
+    box-shadow: 2px 2px 8px rgba(45, 228, 252, 0.6);
 }
 
 .card-img {
@@ -248,8 +250,8 @@ header h1 {
 @media (min-width: 1024px) {
 
     .card:hover {
-        background: rgba(255, 255, 255, 1);
-        border: 1px solid rgba(50, 50, 50, 0.9);
+        background: rgb(254, 255, 197);
+        border: 1px solid rgba(27, 3, 123, 0.9);
     }
 
     .card:hover .card-text {
