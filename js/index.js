@@ -36,9 +36,9 @@ async function getRandUsers(url) {
       };
     }));
  return profiles;
-} catch(error) {
-  console.log('Looks like there was a problem getting user profiles!',error);
-}
+  } catch(error) {
+    console.log('Looks like there was a problem getting user profiles!',error);
+  }
 }
 
 // ------------------------------------------
@@ -54,7 +54,6 @@ function checkStatus(response) {
 
 
 // Generate the markup for each profile
-
 function generateHTML(data) {
   data.map(person => {
     const section = document.createElement('section');
@@ -71,7 +70,7 @@ function generateHTML(data) {
         </div>
       </div>
       `;
-      console.log(person);})
+      })
 }
 
 getRandUsers(randGroupUrl)
