@@ -42,21 +42,36 @@ async function getRandUsers(url) {
     console.log('Looks like there was a problem getting user profiles!',error);
   }
 }
-
 // ------------------------------------------
 //  HELPER FUNCTIONS
 // ------------------------------------------
-function checkStatus(response) {
-  if(response.ok) {
-    return Promise.resolve(response);
-  } else {
-    return Promise.reject(new Error(response.statusText));
+
+function searchFilter() {
+  let searchInput = document.getElementById('search-input');
+  searchInput.addEventListener('keyup', (e) => {
+    let nameInput =searchInput.value.toLowerCase();
+    filterNames(nameInput);
+  });
+  function filterNames(input) {
+    let names = document.querySelectorAll('.card-name');
+    names.forEach(name => {
+      genName = name.innerText.toLowerCase();
+      if(genName.match(input)) {
+        name.parentNode.parentNode.style.display= "block";
+      } else {
+        name.parentNode.parentNode.style.display="none";
+      }
+    });
   }
 }
 
-
 // Generate the markup for each profile
 function generateHTML(data) {
+  searchContainer.innerHTML = `
+  <form action="#" method="get">
+    <input type="search" id="search-input" class="search-input" placeholder="Search...">
+    <input type="submit" value="&#x1F50D;" id="serach-submit" class="search-submit">
+  </form>`;
   data.map(person => {
     const section = document.createElement('section');
     gallery.appendChild(section);
@@ -73,15 +88,20 @@ function generateHTML(data) {
       </div>
       `;
       });
-      searchContainer.innerHTML = `
-      <form action="#" method="get">
-        <input type="search" id="search-input" class="search-input" placeholder="Search...">
-        <input type="submit" value="&#x1F50D;" id="serach-submit" class="search-submit">
-      </form>`;
 }
+
+function modalHandler() {
+  const cards = document.getElementsByClassName('cards');
+  cards.forEach(card => card.addEventListener('click', (e)=> {
+    console.log('working');
+  }));
+}
+
+// ------------------------------------------
 
 getRandUsers(randGroupUrl)
   .then(generateHTML)
+  .then(searchFilter)
   .catch(err => {
     gallery.innerHTML = '<h3>Something went wrong...</h3>';
     console.error(err);
