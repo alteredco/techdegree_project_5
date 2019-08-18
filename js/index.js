@@ -67,7 +67,7 @@ function generateHTML(data) {
         <div class="card-info-container">
           <h3 id="name" class="card-name cap">${person.name} </h3>
             <p class="card-text">${person.email}</p>
-            <p class="card-text">${person.location}</p>
+            <p class="card-text cap">${person.location}</p>
         </div>
       </div>
       `;
