@@ -14,9 +14,9 @@ html, body {
 }
 
 body {
-    font-family: "Nunito", sans-serif;
+    font-family: 'Lexend Deca', sans-serif;
     text-align: center;
-    background: rgba(235, 235, 235, 0.9);
+    background: linear-gradient(to right, #8bf0f0, #76dbc2, #8cfadd);
 }
 
 header {
@@ -29,8 +29,8 @@ header {
 }
 
 header h1 {
-    font-size: 1.25em;
-    color: rgba(50, 50, 50, 0.9);
+    font-size: 2em;
+    color: rgba(24, 40, 40, 0.9);
     margin-top: 35px;
 }
 

@@ -1,8 +1,10 @@
+
+
 const randUserUrl = 'https://randomuser.me/api/';
 const groupNum = "12"
-const randGroupUrl = randUserUrl+`/?results=${groupNum}`;
+const randGroupUrl = randUserUrl+`/?nat=au,us,dk,fr,gb&results=${groupNum}`;
 
-const searchContainer = document.getElementById('search-container');
+const searchContainer = document.querySelector('.search-container');
 const gallery = document.getElementById('gallery');
 
 // ------------------------------------------
@@ -27,7 +29,7 @@ async function getRandUsers(url) {
       let image = person.picture.large;
       let name = `${person.name.first} ${person.name.last}`;
       let email = person.email;
-      let location = `${person.location.city}, ${person.location.state}`
+      let location = `${person.location.city}, ${person.location.state}`;
       return {
         image,
         name,
@@ -35,7 +37,7 @@ async function getRandUsers(url) {
         location
       };
     }));
- return profiles;
+    return profiles;
   } catch(error) {
     console.log('Looks like there was a problem getting user profiles!',error);
   }
@@ -70,7 +72,12 @@ function generateHTML(data) {
         </div>
       </div>
       `;
-      })
+      });
+      searchContainer.innerHTML = `
+      <form action="#" method="get">
+        <input type="search" id="search-input" class="search-input" placeholder="Search...">
+        <input type="submit" value="&#x1F50D;" id="serach-submit" class="search-submit">
+      </form>`;
 }
 
 getRandUsers(randGroupUrl)
