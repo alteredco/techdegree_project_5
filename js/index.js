@@ -8,31 +8,37 @@ const gallery = document.getElementById('gallery');
 // ------------------------------------------
 //  FETCH FUNCTIONS
 // ------------------------------------------
-function fetchData(url) {
-  return fetch(url)
-    .then(checkStatus)
-    .then(res => res.json())
-    .catch(error => console.log('Looks like there was a problem!',error))
+async function fetchData(url) {
+  try {
+    let response = await fetch(url);
+    let data = await response.json();
+    console.log(data.results)
+    return data.results;
+  } catch (error) {
+    console.log('Looks like there was a problem getting data!',error);
+  }
 }
 
-async function getRandUser(url) {
-  const userJSON = await fetchData(url);
-
-  const profiles = userJSON.results.map( async(person) => {
-    const image = person.picture.thumbnail;
-    const name = `${person.name.first} ${person.name.last}`;
-    const email = person.email;
-    const location = `${person.location.city} ${person.location.state}`
-
-    return {
-      image,
-      name,
-      email,
-      location
-    };
-  })
-
-  return profiles;
+async function getRandUsers(url) {
+  try {
+  let userData = await fetchData(url);
+  let profiles = await Promise.all(userData.map( 
+    async(person) => {
+      let image = person.picture.large;
+      let name = `${person.name.first} ${person.name.last}`;
+      let email = person.email;
+      let location = `${person.location.city}, ${person.location.state}`
+      return {
+        image,
+        name,
+        email,
+        location
+      };
+    }));
+ return profiles;
+} catch(error) {
+  console.log('Looks like there was a problem getting user profiles!',error);
+}
 }
 
 // ------------------------------------------
@@ -50,24 +56,25 @@ function checkStatus(response) {
 // Generate the markup for each profile
 
 function generateHTML(data) {
-data.map(person => {
-  const section = document.createElement('section');
-  gallery.appendChild(section);
-  section.innerHTML = `
-    <div class="card">
-      <div class="card-img-container">
-        <img class="card-img" src="https://placehold.it/90x90" alt="profile picture">
+  data.map(person => {
+    const section = document.createElement('section');
+    gallery.appendChild(section);
+    section.innerHTML = `
+      <div class="card">
+        <div class="card-img-container">
+          <img class="card-img" src=${person.image} alt=${person.name}>
+        </div>
+        <div class="card-info-container">
+          <h3 id="name" class="card-name cap">${person.name} </h3>
+            <p class="card-text">${person.email}</p>
+            <p class="card-text">${person.location}</p>
+        </div>
       </div>
-      <div class="card-info-container">
-        <h3 id="name" class="card-name cap">${person.name} </h3>
-          <p class="card-text">${person.email}</p>
-      </div>
-    </div>
-    `;
-    console.log(person);})
+      `;
+      console.log(person);})
 }
 
-getRandUser(randGroupUrl)
+getRandUsers(randGroupUrl)
   .then(generateHTML)
   .catch(err => {
     gallery.innerHTML = '<h3>Something went wrong...</h3>';
