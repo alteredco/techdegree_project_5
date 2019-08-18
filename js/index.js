@@ -134,7 +134,6 @@ function modalGenerator(data) {
 getRandUsers(randGroupUrl)
   .then(generateHTML)
   .then(searchFilter)
-  .then(modalGenerator)
   .catch(err => {
     gallery.innerHTML = '<h3>Something went wrong...</h3>';
     console.error(err);
