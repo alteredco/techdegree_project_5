@@ -123,6 +123,7 @@ function generateHTML(data) {
 }
 
 function modalHandler() {
+  //add click events to cards and match modal profile
   document.querySelectorAll('.card').forEach(card => {
     card.addEventListener('click', e => {
       const currCard = e.currentTarget;
@@ -134,9 +135,25 @@ function modalHandler() {
       });
     });
   });
-  const closeModalBtn = document.getElementById('modal-close-btn');
-  closeModalBtn.addEventListener('click', e => {
-    console.log('close')
+  //add click event to modal close button
+  document.querySelectorAll('#modal-close-btn').forEach(closeModalBtn => {
+    closeModalBtn.addEventListener('click', e => {
+      let modal = e.currentTarget.parentNode.parentNode;
+      modal.style.display = 'none';
+    })
+  })
+  //add click event to forward button and match previous modal profile
+  document.querySelectorAll('#modal-prev').forEach(prevModalBtn => {
+    prevModalBtn.addEventListener('click', e => {
+      const currCard = e.currentTarget.parentNode.parentNode;
+      let currName = currCard.querySelector('#name').innerText.toLowerCase();
+      const modals = document.querySelectorAll('.modal-container');
+      modals.forEach(modal => {
+        const modalName= modal.querySelector('#name').innerText
+      ;
+        console.log(modal)
+      });
+    })
   })
 }
 
