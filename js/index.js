@@ -3,13 +3,13 @@
 const randUserUrl = 'https://randomuser.me/api/';
 const groupNum = "12"
 const randGroupUrl = randUserUrl+`/?nat=au,us,dk,fr,gb&lego&results=${groupNum}`;
-
 const searchContainer = document.querySelector('.search-container');
 const gallery = document.getElementById('gallery');
 
 // ------------------------------------------
 //  FETCH FUNCTIONS
 // ------------------------------------------
+//Get data from Random User API
 async function fetchData(url) {
   try {
     let response = await fetch(url);
@@ -21,6 +21,7 @@ async function fetchData(url) {
   }
 }
 
+//Create user profile from user data request
 async function getRandUsers(url) {
   try {
   let userData = await fetchData(url);
@@ -51,7 +52,7 @@ async function getRandUsers(url) {
 // ------------------------------------------
 //  HELPER FUNCTIONS
 // ------------------------------------------
-
+//Create filter for searches
 function searchFilter() {
   let searchInput = document.getElementById('search-input');
   let searchBtn = document.getElementById('search-submit');
@@ -75,7 +76,6 @@ function filterNames(input) {
 
 // Generate the markup for each profile
 function generateHTML(data) {
-  const num = 0;
   searchContainer.innerHTML = `
   <form action="#" method="get">
     <input type="search" id="search-input" class="search-input" placeholder="Search...">
@@ -122,7 +122,8 @@ function generateHTML(data) {
       });
 }
 
-function modalHandler() {
+//Handle modal interaction
+function modalHandler(data) {
   //add click events to cards and match modal profile
   document.querySelectorAll('.card').forEach(card => {
     card.addEventListener('click', e => {
@@ -148,50 +149,37 @@ function modalHandler() {
       const currCard = e.currentTarget.parentNode.parentNode;
       let currName = currCard.querySelector('#name').innerText.toLowerCase();
       const modals = document.querySelectorAll('.modal-container');
+      //create an array of names from modal profiles and find the current name
+      let nameArr = [];
       modals.forEach(modal => {
-        const modalName= modal.querySelector('#name').innerText
-      ;
-        console.log(modal)
+        const modalName= modal.querySelector('#name').innerText.toLowerCase();
+        nameArr.push(modalName);
       });
+      //find the previous name
+      let prevName = "";
+      for(i =0; i < nameArr.length; i++) {
+        if(currName===nameArr[i]&&i!=0) {
+          prevName = nameArr[i-1]
+        } else if(currName===nameArr[i]&&i===0){ 
+          prevName = nameArr[nameArr.length-1];
+        }
+      }
+      //find modal that matches previous name and display
+      modals.forEach(modal => {
+        const modalName= modal.querySelector('#name').innerText.toLowerCase();
+        prevName===modalName ? modal.style.display='block'  : modal.style.display = 'none';
+      })
     })
   })
 }
-
-// function modalGenerator() {
-//    const modalDiv = document.createElement('div');
-//    gallery.appendChild(modalDiv);
-//    modalDiv.innerHTML = `
-//    <div class="modal-container">
-//                 <div class="modal">
-//                     <button type="button" id="modal-close-btn" class="modal-close-btn"><strong>X</strong></button>
-//                     <div class="modal-info-container">
-//                         <img class="modal-img" src="https://placehold.it/125x125" alt="profile picture">
-//                         <h3 id="name" class="modal-name cap">name</h3>
-//                         <p class="modal-text">email</p>
-//                         <p class="modal-text cap">city</p>
-//                         <hr>
-//                         <p class="modal-text">(555) 555-5555</p>
-//                         <p class="modal-text">123 Portland Ave., Portland, OR 97204</p>
-//                         <p class="modal-text">Birthday: 10/21/2015</p>
-//                     </div>
-//                 </div>
-//                 <div class="modal-btn-container">
-//                     <button type="button" id="modal-prev" class="modal-prev btn">Prev</button>
-//                     <button type="button" id="modal-next" class="modal-next btn">Next</button>
-//                 </div>
-//    `;
-   
-
-// }
 
 // ------------------------------------------
 
 getRandUsers(randGroupUrl)
   .then(generateHTML)
-  .then(searchFilter)
   .then(modalHandler)
+  .then(searchFilter)
   .catch(err => {
     gallery.innerHTML = '<h3>Something went wrong...</h3>';
     console.error(err);
   });
-
