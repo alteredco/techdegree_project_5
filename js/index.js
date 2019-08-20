@@ -190,9 +190,10 @@ function modalHandler() {
           nextName = nameArr[i+1]
         } else if(currName===nameArr[i]&&i===nameArr[nameArr.length-1]){ 
           nextName = nameArr[0];
+          console.log(nextName);
         }
       }
-      //find modal that matches previous name and display
+      //find modal that matches next name and display
       modals.forEach(modal => {
         const modalName= modal.querySelector('#name').innerText.toLowerCase();
         nextName===modalName ? modal.style.display='block'  : modal.style.display = 'none';
