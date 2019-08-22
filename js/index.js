@@ -14,7 +14,6 @@ async function fetchData(url) {
   try {
     let response = await fetch(url);
     let data = await response.json();
-    console.log(data.results)
     return data.results;
   } catch (error) {
     console.log('Looks like there was a problem getting data!',error);
@@ -34,6 +33,7 @@ async function getRandUsers(url) {
       let phone = person.cell;
       let address = `${person.location.street}, ${person.location.state}, ${person.location.postcode}`;
       let dob = person.dob.date;
+      dob = dob.toString().slice(0,10);
       return {
         image,
         name,
@@ -52,25 +52,26 @@ async function getRandUsers(url) {
 // ------------------------------------------
 //  HELPER FUNCTIONS
 // ------------------------------------------
+//Matches profile names to input
+function filterCardNames(input) {
+  let names = document.querySelectorAll( '.card-name');
+  names.forEach(name => {
+    genName = name.innerText.toLowerCase();
+    genName.match(input) ? name.parentNode.parentNode.style.display= "block" : name.parentNode.parentNode.style.display="none";
+  });
+}
+
 //Create filter for searches
 function searchFilter() {
   let searchInput = document.getElementById('search-input');
   let searchBtn = document.getElementById('search-submit');
   searchInput.addEventListener('keyup', (e) => {
     let nameInput =searchInput.value.toLowerCase();
-    filterNames(nameInput);
+    filterCardNames(nameInput);
   });
   searchBtn.addEventListener('click', (e)=> {
     let nameInput =searchInput.value.toLowerCase();
-    filterNames(nameInput);
-  });
-}
-
-function filterNames(input) {
-  let names = document.querySelectorAll('.card-name');
-  names.forEach(name => {
-    genName = name.innerText.toLowerCase();
-    genName.match(input) ? name.parentNode.parentNode.style.display= "block" : name.parentNode.parentNode.style.display="none";
+    filterNames(nameInput, '.card-name');
   });
 }
 
@@ -109,7 +110,7 @@ function generateHTML(data) {
                               <p class="modal-text cap">${person.location}</p>
                               <hr>
                               <p class="modal-text">${person.phone}</p>
-                              <p class="modal-text">${person.address}</p>
+                              <p class="modal-text cap">${person.address}</p>
                               <p class="modal-text">Birthday: ${person.dob}</p>
               </div>
              </div>
@@ -124,12 +125,24 @@ function generateHTML(data) {
 
 //Handle modal interaction
 function modalHandler() {
+  const modals = document.querySelectorAll('.modal-container');
+  
+  //create an array of names from modal profiles and find the current name
+  function createModalNameArr() {
+    let nameArr = [];
+    modals.forEach(modal => {
+      const modalName= modal.querySelector('#name').innerText.toLowerCase();
+      nameArr.push(modalName);
+    });
+    return nameArr;
+  };
+  const modalNameArr = createModalNameArr();
+
   //add click events to cards and match modal profile
   document.querySelectorAll('.card').forEach(card => {
     card.addEventListener('click', e => {
       const currCard = e.currentTarget;
       const currName = currCard.querySelector('.card-name').innerText.toLowerCase();
-      const modals = document.querySelectorAll('.modal-container');
       modals.forEach(modal => {
         const modalName = modal.querySelector('#name').innerText
         currName===modalName ? modal.style.display='block'  : modal.style.display = 'none';
@@ -148,20 +161,13 @@ function modalHandler() {
     prevModalBtn.addEventListener('click', e => {
       const currCard = e.currentTarget.parentNode.parentNode;
       let currName = currCard.querySelector('#name').innerText.toLowerCase();
-      const modals = document.querySelectorAll('.modal-container');
-      //create an array of names from modal profiles and find the current name
-      let nameArr = [];
-      modals.forEach(modal => {
-        const modalName= modal.querySelector('#name').innerText.toLowerCase();
-        nameArr.push(modalName);
-      });
       //find the previous name
       let prevName = "";
-      for(i =0; i < nameArr.length; i++) {
-        if(currName===nameArr[i]&&i!=0) {
-          prevName = nameArr[i-1]
-        } else if(currName===nameArr[i]&&i===0){ 
-          prevName = nameArr[nameArr.length-1];
+      for(i =0; i < modalNameArr.length; i++) {
+        if(currName===modalNameArr[i]&&i!=0) {
+          prevName = modalNameArr[i-1]
+        } else if(currName===modalNameArr[i]&&i===0){ 
+          prevName = modalNameArr[modalNameArr.length-1];
         }
       }
       //find modal that matches previous name and display
@@ -176,21 +182,14 @@ function modalHandler() {
    nxtModalBtn.addEventListener('click', e => {
       const currCard = e.currentTarget.parentNode.parentNode;
       let currName = currCard.querySelector('#name').innerText.toLowerCase();
-      const modals = document.querySelectorAll('.modal-container');
       //create an array of names from modal profiles and find the current name
-      let nameArr = [];
-      modals.forEach(modal => {
-        const modalName= modal.querySelector('#name').innerText.toLowerCase();
-        nameArr.push(modalName);
-      });
       //find the next name
       let nextName = "";
-      for(i =0; i < nameArr.length; i++) {
-        if(currName===nameArr[i]&&i!=0) {
-          nextName = nameArr[i+1]
-        } else if(currName===nameArr[i]&&i===nameArr[nameArr.length-1]){ 
-          nextName = nameArr[0];
-          console.log(nextName);
+      for(i =0; i < modalNameArr.length; i++) {
+        if(currName===modalNameArr[i]&&i!=0) {
+          nextName = modalNameArr[i+1]
+        } else if(currName===modalNameArr[i]&&i!=modalNameArr[modalNameArr.length-1]){ 
+          nextName = modalNameArr[0];
         }
       }
       //find modal that matches next name and display
