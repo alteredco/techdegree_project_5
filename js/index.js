@@ -9,7 +9,9 @@ const gallery = document.getElementById('gallery');
 // ------------------------------------------
 //  FETCH FUNCTIONS
 // ------------------------------------------
-//Get data from Random User API
+  /*Get data from Random User API
+  @params {string} url - url for API
+    */
 async function fetchData(url) {
   try {
     let response = await fetch(url);
@@ -20,7 +22,9 @@ async function fetchData(url) {
   }
 }
 
-//Create user profile from user data request
+/*Create user data profile from user data request
+  @params {string} url - url for API
+    */
 async function getRandUsers(url) {
   try {
   let userData = await fetchData(url);
@@ -52,7 +56,10 @@ async function getRandUsers(url) {
 // ------------------------------------------
 //  HELPER FUNCTIONS
 // ------------------------------------------
-//Matches profile names to input
+
+ /*Match profile names to input
+  @params {string} input - input from user
+    */
 function filterCardNames(input) {
   let names = document.querySelectorAll( '.card-name');
   names.forEach(name => {
@@ -61,7 +68,8 @@ function filterCardNames(input) {
   });
 }
 
-//Create filter for searches
+/*Filter searches
+    */
 function searchFilter() {
   let searchInput = document.getElementById('search-input');
   let searchBtn = document.getElementById('search-submit');
@@ -75,7 +83,9 @@ function searchFilter() {
   });
 }
 
-// Generate the markup for each profile
+/*Generate the markup for each profile
+  @params {array} data - user data profiles array
+    */
 function generateHTML(data) {
   searchContainer.innerHTML = `
   <form action="#" method="get">
@@ -123,11 +133,12 @@ function generateHTML(data) {
       });
 }
 
-//Handle modal interaction
+/*Handle modal interaction
+    */
 function modalHandler() {
   const modals = document.querySelectorAll('.modal-container');
-  
-  //create an array of names from modal profiles and find the current name
+  /*Create an array of names from modal profiles 
+    */
   function createModalNameArr() {
     let nameArr = [];
     modals.forEach(modal => {
@@ -138,15 +149,22 @@ function modalHandler() {
   };
   const modalNameArr = createModalNameArr();
 
+  /*Match to modal profiles to names
+  @params {var} findName - name variable to match with modal
+    */
+   function modalMatch(findName) {
+    modals.forEach(modal => {
+      const modalName = modal.querySelector('#name').innerText
+      findName===modalName ? modal.style.display='block'  : modal.style.display = 'none';
+    });
+   }
+
   //add click events to cards and match modal profile
   document.querySelectorAll('.card').forEach(card => {
     card.addEventListener('click', e => {
       const currCard = e.currentTarget;
       const currName = currCard.querySelector('.card-name').innerText.toLowerCase();
-      modals.forEach(modal => {
-        const modalName = modal.querySelector('#name').innerText
-        currName===modalName ? modal.style.display='block'  : modal.style.display = 'none';
-      });
+      modalMatch(currName);
     });
   });
   //add click event to modal close button
@@ -171,10 +189,7 @@ function modalHandler() {
         }
       }
       //find modal that matches previous name and display
-      modals.forEach(modal => {
-        const modalName= modal.querySelector('#name').innerText.toLowerCase();
-        prevName===modalName ? modal.style.display='block'  : modal.style.display = 'none';
-      })
+      modalMatch( prevName);
     })
   })
   //add click event to forward button and match next modal profile
@@ -193,10 +208,7 @@ function modalHandler() {
         }
       }
       //find modal that matches next name and display
-      modals.forEach(modal => {
-        const modalName= modal.querySelector('#name').innerText.toLowerCase();
-        nextName===modalName ? modal.style.display='block'  : modal.style.display = 'none';
-      })
+      modalMatch(nextName);
     })
   })
 }
