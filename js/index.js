@@ -79,7 +79,7 @@ function searchFilter() {
   });
   searchBtn.addEventListener('click', (e)=> {
     let nameInput =searchInput.value.toLowerCase();
-    filterNames(nameInput, '.card-name');
+    filterNames(nameInput);
   });
 }
 
@@ -201,9 +201,9 @@ function modalHandler() {
       //find the next name
       let nextName = "";
       for(i =0; i < modalNameArr.length; i++) {
-        if(currName===modalNameArr[i]&&i!=0) {
-          nextName = modalNameArr[i+1]
-        } else if(currName===modalNameArr[i]&&i!=modalNameArr[modalNameArr.length-1]){ 
+        if(currName===modalNameArr[i]&&i!=modalNameArr.length-1) {
+          nextName = modalNameArr[i+1];
+        } else if(currName===modalNameArr[i]&&i===modalNameArr.length-1){ 
           nextName = modalNameArr[0];
         }
       }
