@@ -38,6 +38,8 @@ async function getRandUsers(url) {
       let address = `${person.location.street}, ${person.location.state}, ${person.location.postcode}`;
       let dob = person.dob.date;
       dob = dob.toString().slice(0,10);
+      dob = dob.slice(4) + "-" +dob.slice(0, 4);
+      dob = dob.substring(1);
       return {
         image,
         name,
@@ -174,7 +176,7 @@ function modalHandler() {
       modal.style.display = 'none';
     })
   })
-  //add click event to back button and match previous modal profile
+  //FOR EXCEEDS: add click event to back button and match previous modal profile
   document.querySelectorAll('#modal-prev').forEach(prevModalBtn => {
     prevModalBtn.addEventListener('click', e => {
       const currCard = e.currentTarget.parentNode.parentNode;
